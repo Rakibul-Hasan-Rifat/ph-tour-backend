@@ -24,10 +24,6 @@ const createUserContrller = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await userServices.createUserService(req.body);
 
-    // res
-    //   .status(httpStatusCodes.CREATED)
-    //   .json({ message: "User created successfully.", user });
-
     responseSender(res, {
       success: true,
       statusCode: httpStatusCodes.CREATED,
@@ -37,6 +33,28 @@ const createUserContrller = catchAsync(
   }
 );
 
-const userControllers = { getAllUserController, createUserContrller };
+const updateUserContrller = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+
+    const user = await userServices.updateUserService(
+      req.params.id,
+      req.body,
+      req.user
+    );
+
+    responseSender(res, {
+      success: true,
+      statusCode: httpStatusCodes.ACCEPTED,
+      message: "User updated successfully!",
+      data: user,
+    });
+  }
+);
+
+const userControllers = {
+  getAllUserController,
+  createUserContrller,
+  updateUserContrller,
+};
 
 export default userControllers;
