@@ -8,7 +8,7 @@ import { IUser, Role } from "../modules/user/user.interface";
 const seedSuperAdmin = async () => {
   try {
     const isSuperAdminAvailable = await User.findOne({
-      email: environmentVariables.super_admin_email,
+      email: environmentVariables.SUPER_ADMIN_EMAIL,
     });
 
     if (isSuperAdminAvailable) {
@@ -19,20 +19,20 @@ const seedSuperAdmin = async () => {
     console.log("Trying to create super admin 😎");
 
     const hashedPassword = await bcrypt.hash(
-      environmentVariables.super_admin_password,
-      parseInt(environmentVariables.hash_salt)
+      environmentVariables.SUPER_ADMIN_PASSWORD,
+      parseInt(environmentVariables.BCRYPT_SALT_ROUND)
     );
 
     const superAdminInfo: Partial<IUser> = {
       name: "Super Admin",
-      email: environmentVariables.super_admin_email,
+      email: environmentVariables.SUPER_ADMIN_EMAIL,
       role: Role.SUPER_ADMIN,
       password: hashedPassword,
       isVerified: true,
       auths: [
         {
           provider: "credentials",
-          providerId: environmentVariables.super_admin_email,
+          providerId: environmentVariables.SUPER_ADMIN_EMAIL,
         },
       ],
     };

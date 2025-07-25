@@ -19,7 +19,7 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
     success: false,
     message,
     err,
-    stack: environmentVariables.node_env === "development" ? err.stack : null,
+    stack: environmentVariables.NODE_ENV === "development" ? err.stack : null,
   });
 }
 
