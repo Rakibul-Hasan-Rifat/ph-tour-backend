@@ -3,13 +3,21 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 interface IEnvironmentVariables {
-  port: string;
-  mongo_uri: string;
-  hash_salt: string;
-  secret_key: string;
-  super_admin_email: string;
-  super_admin_password: string;
-  node_env: "development" | "production";
+  PORT: string;
+  MONGO_URI: string;
+  BCRYPT_SALT_ROUND: string;
+  SUPER_ADMIN_EMAIL: string;
+  JWT_ACCESS_SECRET: string;
+  JWT_REFRESH_SECRET: string;
+  JWT_ACCESS_EXPIRES: string;
+  JWT_REFRESH_EXPIRES: string;
+  SUPER_ADMIN_PASSWORD: string;
+  NODE_ENV: "development" | "production";
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+  GOOGLE_CALLBACK_URL: string;
+  EXPRESS_SESSION: string;
+  FRONTEND_URL: string;
 }
 
 export const loadEnvironmentVariables = (): IEnvironmentVariables => {
@@ -17,10 +25,18 @@ export const loadEnvironmentVariables = (): IEnvironmentVariables => {
     "PORT",
     "NODE_ENV",
     "MONGO_URI",
-    "JWT_SECRET_KEY",
+    "FRONTEND_URL",
+    "EXPRESS_SESSION",
+    "GOOGLE_CLIENT_ID",
+    "JWT_ACCESS_SECRET",
     "BCRYPT_SALT_ROUND",
     "SUPER_ADMIN_EMAIL",
+    "JWT_ACCESS_EXPIRES",
+    "JWT_REFRESH_SECRET",
+    "JWT_REFRESH_EXPIRES",
+    "GOOGLE_CALLBACK_URL",
     "SUPER_ADMIN_PASSWORD",
+    "GOOGLE_CLIENT_SECRET",
   ];
 
   requiredEnvVars.forEach((key) => {
@@ -30,13 +46,21 @@ export const loadEnvironmentVariables = (): IEnvironmentVariables => {
   });
 
   return {
-    port: process.env.PORT as string,
-    mongo_uri: process.env.MONGO_URI as string,
-    secret_key: process.env.JWT_SECRET_KEY as string,
-    hash_salt: process.env.BCRYPT_SALT_ROUND as string,
-    super_admin_email: process.env.SUPER_ADMIN_EMAIL as string,
-    node_env: process.env.NODE_ENV as "development" | "production",
-    super_admin_password: process.env.SUPER_ADMIN_PASSWORD as string,
+    PORT: process.env.PORT as string,
+    MONGO_URI: process.env.MONGO_URI as string,
+    FRONTEND_URL: process.env.FRONTEND_URL as string,
+    EXPRESS_SESSION: process.env.EXPRESS_SESSION as string,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
+    SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
+    BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND as string,
+    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET as string,
+    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET as string,
+    JWT_ACCESS_EXPIRES: process.env.JWT_ACCESS_EXPIRES as string,
+    JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES as string,
+    GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL as string,
+    NODE_ENV: process.env.NODE_ENV as "development" | "production",
+    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
   };
 };
 

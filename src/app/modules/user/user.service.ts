@@ -21,7 +21,7 @@ const createUserService = async (payload: Partial<IUser>) => {
 
   const hashedPassword = await bcrypt.hash(
     password as string,
-    parseInt(environmentVariables.hash_salt) as number
+    parseInt(environmentVariables.JWT_ACCESS_SECRET) as number
   );
 
   const authProvider: IAuthProvider = {
@@ -77,7 +77,7 @@ const updateUserService = async (
   if (payload.password) {
     payload.password = await bcrypt.hash(
       payload.password,
-      environmentVariables.hash_salt
+      environmentVariables.JWT_ACCESS_SECRET
     );
   }
 

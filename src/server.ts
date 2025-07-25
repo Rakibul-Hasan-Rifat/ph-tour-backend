@@ -2,20 +2,21 @@
 import { log } from "console";
 import { Server } from "http";
 import mongoose from "mongoose";
+
 import app from "./app";
-import environmentVariables from "./app/config/env.config";
 import seedSuperAdmin from "./app/utils/seedSuperAdmin";
+import environmentVariables from "./app/config/env.config";
 
 let server: Server;
 
 const startServer = async () => {
   try {
-    await mongoose.connect(environmentVariables.mongo_uri as string);
+    await mongoose.connect(environmentVariables.MONGO_URI as string);
     log("MongoDB is conncted successfully!!");
 
-    server = app.listen(environmentVariables.port, () => {
+    server = app.listen(environmentVariables.PORT, () => {
       console.log(
-        `Server is running at http://localhost:${environmentVariables.port}`
+        `Server is running at http://localhost:${environmentVariables.PORT}`
       );
     });
   } catch (error) {
