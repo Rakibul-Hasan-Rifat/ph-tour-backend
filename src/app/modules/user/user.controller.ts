@@ -3,6 +3,7 @@ import userServices from "./user.service";
 import httpStatusCodes from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import responseSender from "../../utils/reponseSender";
+import { JwtPayload } from "jsonwebtoken";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -22,7 +23,11 @@ const getAllUserController = catchAsync(
 
 const createUserContrller = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+
+    console.log('create user controller');
     const user = await userServices.createUserService(req.body);
+
+    
 
     responseSender(res, {
       success: true,
@@ -39,7 +44,7 @@ const updateUserContrller = catchAsync(
     const user = await userServices.updateUserService(
       req.params.id,
       req.body,
-      req.user
+      req.user as JwtPayload
     );
 
     responseSender(res, {

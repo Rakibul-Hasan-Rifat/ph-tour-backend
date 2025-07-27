@@ -10,18 +10,21 @@ import { IAuthProvider, IUser, Role } from "./user.interface";
 const createUserService = async (payload: Partial<IUser>) => {
   const { email, password, ...rest } = payload;
 
+  console.log('create user service', email, password);
+  
+
   const isUserAvailable = await User.findOne({ email });
 
-  if (isUserAvailable) {
-    throw new AppError(
-      httpStatusCodes.BAD_REQUEST,
-      "User already exists with this mail"
-    );
-  }
+  // if (isUserAvailable) {
+  //   throw new AppError(
+  //     httpStatusCodes.BAD_REQUEST,
+  //     "User already exists with this mail"
+  //   );
+  // }
 
   const hashedPassword = await bcrypt.hash(
     password as string,
-    parseInt(environmentVariables.JWT_ACCESS_SECRET) as number
+    parseInt(environmentVariables.BCRYPT_SALT_ROUND) as number
   );
 
   const authProvider: IAuthProvider = {

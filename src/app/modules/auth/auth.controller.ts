@@ -1,3 +1,4 @@
+import type { IUser } from './../user/user.interface';
 import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
 import responseSender from "../../utils/reponseSender";
@@ -8,6 +9,7 @@ import AppError from "../../errors/app.error";
 import createUserToken from "../../utils/userTokens";
 import environmentVariables from "../../config/env.config";
 import { JwtPayload } from "jsonwebtoken";
+import passport from "passport";
 
 const credentialsLoginController = catchAsync(
   async (req: Request, res: Response) => {
@@ -93,7 +95,7 @@ const googleCallbackControler = catchAsync(async (req: Request, res: Response) =
     throw new AppError(httpStatusCodes.NOT_FOUND, "User Not Found")
   }
 
-const tokenInfo = createUserToken(user as Express.User)
+const tokenInfo = createUserToken(user)
 
 setAuthCookie(res, tokenInfo)
 
@@ -101,11 +103,66 @@ res.redirect(`${environmentVariables.FRONTEND_URL}`)
 
 })
 
+const googleLocalLoginController = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // passport.authenticate("local", (err: any, user: any, info: any, status: any) => {
+    
+  //   if(err) {
+  //     return next(new AppError(401, err));
+  //   }
+
+  //   if(!user) {
+  //     return next(new AppError(401, "User not found!"))
+  //   }
+
+  //   const userTokens = createUserToken(user);
+
+  //   setAuthCookie(res, userTokens);
+
+  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   const {password, ...rest} = user.toObject();
+
+  //   responseSender(res, {
+  //     success: true,
+  //     statusCode: 200,
+  //     message: "User logged in successfully by passport-local!",
+  //     data: {
+  //       accessToken: userTokens.accessToken, refreshToken: userTokens.refreshToken, user: rest
+  //     }
+  //   })
+
+  // })(req, res, next)
+
+  const user = req.user;
+
+  if (!user) {
+      return next(new AppError(401, "User not found!"))
+  }
+
+      const userTokens = createUserToken(user);
+
+    setAuthCookie(res, userTokens);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {password, ...rest} = user as IUser;
+
+    responseSender(res, {
+      success: true,
+      statusCode: 200,
+      message: "User logged in successfully by passport-local without authenticate!",
+      data: {
+        accessToken: userTokens.accessToken, refreshToken: userTokens.refreshToken, user: rest
+      }
+    })
+})
+
 const authControllers = {
   logoutController,
   googleCallbackControler,
   resetPasswordController,
   credentialsLoginController,
+  googleLocalLoginController,
   getNewAccessTokenController,
 };
 
