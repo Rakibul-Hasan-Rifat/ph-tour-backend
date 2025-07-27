@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import authControllers from "./auth.controller";
 import checkAuth from "../../middlewares/checkAuth";
 import { Role } from "../user/user.interface";
@@ -11,9 +11,12 @@ authRoute.post("/logout", authControllers.logoutController);
 authRoute.post("/login", authControllers.credentialsLoginController);
 authRoute.post("/refresh-token", authControllers.getNewAccessTokenController);
 authRoute.post("/reset-password", checkAuth(...Object.values(Role)), authControllers.resetPasswordController);
-authRoute.get("/google", async(req: Request, res: Response) => {
+
+authRoute.post("/passport-local-login", passport.authenticate('local', { failureRedirect: '/passport-local-login' }), authControllers.googleLocalLoginController);
+
+authRoute.get("/google", async(req: Request, res: Response, next: NextFunction) => {
     const redirect = req.query.redirect || "/";
-    passport.authenticate("google", {scope: ["profile", "email"], state: redirect as string})(req, res)
+    passport.authenticate("google", {scope: ["profile", "email"], state: redirect as string})(req, res, next)
 })
 authRoute.get("/google/callback", passport.authenticate('google', { failureRedirect: '/login' }), authControllers.googleCallbackControler)
 export default authRoute;
