@@ -13,7 +13,7 @@ export const TourType = model<ITourType>("TourType", tourTypeSchema);
 const tourSchema = new Schema<ITour>(
   {
     title: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String, unique: true },
     images: { type: [String], default: [] },
     description: { type: String },
     location: { type: String },
@@ -34,6 +34,37 @@ const tourSchema = new Schema<ITour>(
     versionKey: false,
   }
 );
+
+tourSchema.pre("save", async function (next) {
+  if (this.isModified("name")) {
+    const slug = this.title
+      .toLowerCase()
+      .trim()
+      .split(" ")
+      .join("-")
+      .concat("-tour");
+    this.slug = slug;
+  }
+  next();
+});
+
+tourSchema.pre("findOneAndUpdate", async function (next) {
+  const tour = this.getUpdate() as Partial<ITour>;
+
+  if (tour.title) {
+    const slug = tour.title
+      .toLowerCase()
+      .trim()
+      .split(" ")
+      .join("-")
+      .concat("-tour");
+    tour.slug = slug;
+  }
+
+  this.setUpdate(tour);
+
+  next();
+});
 
 const Tour = model<ITour>("Tour", tourSchema);
 

@@ -3,11 +3,7 @@ import { ZodObject } from "zod";
 
 const validateRequest = (zodShema: ZodObject) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log('validate request');
-        
-        req.body = await zodShema.parseAsync(req.body);        
-        console.log(req.body);
-        
+        req.body = await zodShema.parseAsync(req.body);
         next();
     } catch (error) {
         // eslint-disable-next-line no-console
