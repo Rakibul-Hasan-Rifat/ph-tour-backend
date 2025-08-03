@@ -22,12 +22,8 @@ const getAllUserController = catchAsync(
 );
 
 const createUserContrller = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-
-    console.log('create user controller');
-    const user = await userServices.createUserService(req.body);
-
-    
+  async (req: Request, res: Response) => {
+    const user = await userServices.createUserService(req.body);    
 
     responseSender(res, {
       success: true,

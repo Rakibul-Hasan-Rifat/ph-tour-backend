@@ -145,7 +145,7 @@ const googleLocalLoginController = catchAsync(async (req: Request, res: Response
     setAuthCookie(res, userTokens);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {password, ...rest} = user as IUser;
+    const {password, ...rest} = user.toObject() as IUser;
 
     responseSender(res, {
       success: true,

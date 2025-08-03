@@ -8,7 +8,7 @@ declare global {
     }
 
     interface User {
-      _id: Types.ObjectId; // MongoDB ID
+      _id?: Types.ObjectId; // MongoDB ID
       email: string;
       role: string;
     }
